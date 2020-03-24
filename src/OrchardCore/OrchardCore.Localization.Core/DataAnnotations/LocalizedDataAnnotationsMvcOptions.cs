@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 
@@ -7,22 +6,18 @@ namespace OrchardCore.Localization.DataAnnotations
 {
     internal class LocalizedDataAnnotationsMvcOptions : IConfigureOptions<MvcOptions>
     {
-        private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly IStringLocalizerFactory _stringLocalizerFactory;
 
-        public LocalizedDataAnnotationsMvcOptions(IServiceScopeFactory serviceScopeFactory)
+        public LocalizedDataAnnotationsMvcOptions(IStringLocalizerFactory stringLocalizerFactory)
         {
-            _serviceScopeFactory = serviceScopeFactory;
+            _stringLocalizerFactory = stringLocalizerFactory;
         }
 
         public void Configure(MvcOptions options)
         {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                var serviceProvider = scope.ServiceProvider;
-                var localizer = serviceProvider.GetService<IStringLocalizerFactory>().Create(typeof(LocalizedDataAnnotationsMvcOptions));
+            var localizer = _stringLocalizerFactory.Create(typeof(LocalizedDataAnnotationsMvcOptions));
 
-                options.ModelMetadataDetailsProviders.Add(new LocalizedValidationMetadataProvider(localizer));
-            }
+            options.ModelMetadataDetailsProviders.Add(new LocalizedValidationMetadataProvider(localizer));
         }
     }
 }
