@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using OrchardCore.Localization.Extensions;
 
 namespace OrchardCore.Localization.PortableObject
 {
@@ -208,6 +209,11 @@ namespace OrchardCore.Localization.PortableObject
                             // Extract translation without context
                             key = CultureDictionaryRecord.GetKey(name, null);
                             translation = dictionary[key, count];
+
+                            if (translation == null)
+                            {
+                                translation = dictionary.GetTranslationWithIgnoreContext(key);
+                            }
                         }
                     }
 

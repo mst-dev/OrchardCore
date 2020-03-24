@@ -24,21 +24,21 @@ namespace OrchardCore.Localization.DataAnnotations
             {
                 var attribute = metadata as ValidationAttribute;
                 var argument = context.Key.Name;
-                if (attribute != null && attribute.ErrorMessage == null && attribute.ErrorMessageResourceName == null)
+                var errorMessageString = attribute != null && attribute.ErrorMessage == null && attribute.ErrorMessageResourceName == null
+                    ? attribute.FormatErrorMessage(argument)
+                    : attribute.ErrorMessage;
+
+                // Localize the error message without params
+                var localizedString = _stringLocalizer[errorMessageString];
+
+                if (localizedString == errorMessageString)
                 {
-                    // Localize the error message without params
-                    var errorMessageString = attribute.FormatErrorMessage(argument);
-                    var localizedString = _stringLocalizer[errorMessageString];
-
-                    if (localizedString == errorMessageString)
-                    {
-                        // Localize the error message with params
-                        errorMessageString = errorMessageString.Replace(argument, "{0}");
-                        localizedString = _stringLocalizer[errorMessageString, argument];
-                    }
-
-                    attribute.ErrorMessage = localizedString;
+                    // Localize the error message with params
+                    errorMessageString = errorMessageString.Replace(argument, "{0}");
+                    localizedString = _stringLocalizer[errorMessageString, argument];
                 }
+
+                attribute.ErrorMessage = localizedString;
             }
         }
     }
