@@ -19,7 +19,7 @@
 			"type": "coreclr",
 			"request": "launch",
 			"internalConsoleOptions": "openOnSessionStart",
-			"preLaunchTask": "Web App: Dotnet Build Debug",
+			"preLaunchTask": "",
 			"program": "${workspaceRoot}/src/OrchardCore.Cms.Web/bin/Debug/netcoreapp3.0/OrchardCore.Cms.Web.dll",
 			"args": [],
 			"cwd": "${workspaceRoot}/src/OrchardCore.Cms.Web",
